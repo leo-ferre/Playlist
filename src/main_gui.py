@@ -388,7 +388,7 @@ class PlaylistGUI:
                 anchor='w').pack(fill='x')
 
         # Frame para botões de ação
-        btn_frame = tk.Frame(card, bg=self.cores['bg_card'], width=100)
+        btn_frame = tk.Frame(card, bg=self.cores['bg_card'])
         btn_frame.pack(side='right', padx=5, pady=5)
 
         # Botão Editar
@@ -400,9 +400,10 @@ class PlaylistGUI:
                               font=('Arial', 9, 'bold'),
                               relief='flat',
                               cursor='hand2',
-                              width=8,
+                              padx=10,
+                              pady=5,
                               activeforeground=self.cores['texto_botoes'])
-        btn_editar.pack(pady=2)
+        btn_editar.pack(pady=2, fill='x')
 
         # Botão Remover
         btn_remover = tk.Button(btn_frame,
@@ -413,9 +414,10 @@ class PlaylistGUI:
                                font=('Arial', 9, 'bold'),
                                relief='flat',
                                cursor='hand2',
-                               width=8,
+                               padx=10,
+                               pady=5,
                                activeforeground=self.cores['texto_botoes'])
-        btn_remover.pack(pady=2)
+        btn_remover.pack(pady=2, fill='x')
 
         # Botão Trocar Imagem
         btn_imagem = tk.Button(btn_frame,
@@ -426,9 +428,10 @@ class PlaylistGUI:
                               font=('Arial', 9, 'bold'),
                               relief='flat',
                               cursor='hand2',
-                              width=8,
+                              padx=10,
+                              pady=5,
                               activeforeground=self.cores['texto_botoes'])
-        btn_imagem.pack(pady=2)
+        btn_imagem.pack(pady=2, fill='x')
 
     def atualizar_lista(self):
         """Atualiza a lista de músicas na interface"""
