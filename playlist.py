@@ -43,7 +43,7 @@ def instalar_dependencias():
     print()
     print("=" * 70)
     print()
-    print("    🔧 INSTALADOR AUTOMÁTICO".center(70))
+    print("    INSTALADOR AUTOMÁTICO".center(70))
     print()
     print("=" * 70)
     print()
@@ -57,16 +57,16 @@ def instalar_dependencias():
     else:
         sistema_nome = "Linux"
 
-    print(f"✅ Sistema detectado: {sistema_nome}")
+    print(f">> Sistema detectado: {sistema_nome}")
     print()
 
     # Verifica se Python está instalado corretamente
-    print(f"✅ Python {sys.version.split()[0]} encontrado")
+    print(f">> Python {sys.version.split()[0]} encontrado")
     print()
 
-    print("📦 Instalando dependências necessárias...")
-    print("   • Pillow (manipulação de imagens)")
-    print("   • requests (chamadas à API)")
+    print(">> Instalando dependências necessárias...")
+    print("   - Pillow (manipulação de imagens)")
+    print("   - requests (chamadas à API)")
     print()
 
     try:
@@ -77,7 +77,7 @@ def instalar_dependencias():
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL
         )
-        print("      ✅ pip atualizado")
+        print("      >> pip atualizado")
 
         # Instala dependências
         print("[2/2] Instalando Pillow e requests...")
@@ -86,12 +86,12 @@ def instalar_dependencias():
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL
         )
-        print("      ✅ Dependências instaladas")
+        print("      >> Dependências instaladas")
 
         print()
         print("=" * 70)
         print()
-        print("    ✅ INSTALAÇÃO CONCLUÍDA COM SUCESSO!".center(70))
+        print("    INSTALAÇÃO CONCLUÍDA COM SUCESSO!".center(70))
         print()
         print("=" * 70)
         print()
@@ -100,14 +100,14 @@ def instalar_dependencias():
 
     except subprocess.CalledProcessError as e:
         print()
-        print("❌ Erro durante a instalação!")
+        print(">> Erro durante a instalação!")
         print()
-        print("💡 Tente instalar manualmente:")
+        print(">> Tente instalar manualmente:")
         print(f"   {sys.executable} -m pip install Pillow requests")
         print()
         return False
     except Exception as e:
-        print(f"❌ Erro inesperado: {e}")
+        print(f">> Erro inesperado: {e}")
         return False
 
 
@@ -131,7 +131,7 @@ def mostrar_cabecalho():
     """Exibe o cabeçalho do sistema"""
     print("=" * 60)
     print()
-    print("     SISTEMA DE GERENCIAMENTO DE PLAYLIST".center(60))
+    print("SISTEMA DE GERENCIAMENTO DE PLAYLIST".center(60))
     print()
     print("=" * 60)
     print()
@@ -140,13 +140,13 @@ def mostrar_cabecalho():
 def mostrar_menu():
     """Exibe o menu principal"""
     print("-" * 60)
-    print("                  OPÇÕES DISPONÍVEIS".center(60))
+    print("OPÇÕES DISPONÍVEIS".center(60))
     print("-" * 60)
     print()
-    print("  1. 🎨 Interface Gráfica")
-    print("  2. 💻 Linha de Comando (CLI)")
-    print("  3. 📚 Ver Documentação")
-    print("  4. 🚪 Sair")
+    print("  1. Interface Gráfica")
+    print("  2. Linha de Comando (CLI)")
+    print("  3. Ver Documentação")
+    print("  4. Sair")
     print()
     print("-" * 60)
     print()
@@ -161,10 +161,10 @@ def abrir_documentacao(doc_path):
             subprocess.run(['open', str(doc_path)], check=False)
         else:  # Linux
             subprocess.run(['xdg-open', str(doc_path)], check=False)
-        print("✅ Documentação aberta!")
+        print(">> Documentação aberta!")
     except Exception as e:
-        print(f"⚠️ Não foi possível abrir automaticamente.")
-        print(f"📄 Documentação disponível em: {doc_path}")
+        print(f">> Não foi possível abrir automaticamente.")
+        print(f">> Documentação disponível em: {doc_path}")
 
 
 def verificar_tkinter():
@@ -187,21 +187,21 @@ def verificar_tkinter():
 def executar_gui(project_root):
     """Executa a interface gráfica"""
     print()
-    print("🎨 Iniciando Interface Gráfica...")
+    print(">> Iniciando Interface Gráfica...")
     print()
 
     if not verificar_tkinter():
-        print("❌ Erro: tkinter não está instalado!")
+        print(">> Erro: tkinter não está instalado!")
         print()
-        print("💡 Para instalar:")
+        print(">> Para instalar:")
         if os.name == 'nt':
-            print("   • Reinstale o Python marcando 'tcl/tk and IDLE' na instalação")
-            print("   • Ou baixe de: https://www.python.org/downloads/")
+            print("   - Reinstale o Python marcando 'tcl/tk and IDLE' na instalação")
+            print("   - Ou baixe de: https://www.python.org/downloads/")
         elif sys.platform == 'darwin':
-            print("   • macOS (Homebrew): brew install python-tk")
+            print("   - macOS (Homebrew): brew install python-tk")
         else:
-            print("   • Ubuntu/Debian: sudo apt-get install python3-tk")
-            print("   • Fedora: sudo dnf install python3-tkinter")
+            print("   - Ubuntu/Debian: sudo apt-get install python3-tk")
+            print("   - Fedora: sudo dnf install python3-tkinter")
         print()
         input("Pressione Enter para voltar ao menu...")
         return
@@ -210,26 +210,26 @@ def executar_gui(project_root):
     try:
         subprocess.run([sys.executable, str(gui_path)], check=True)
     except subprocess.CalledProcessError:
-        print("❌ Erro ao executar a interface gráfica")
+        print(">> Erro ao executar a interface gráfica")
         input("Pressione Enter para voltar ao menu...")
     except KeyboardInterrupt:
-        print("\n⚠️ Interface gráfica fechada pelo usuário")
+        print("\n>> Interface gráfica fechada pelo usuário")
 
 
 def executar_cli(project_root):
     """Executa a interface de linha de comando"""
     print()
-    print("💻 Iniciando Modo Linha de Comando...")
+    print(">> Iniciando Modo Linha de Comando...")
     print()
 
     cli_path = project_root / 'src' / 'main.py'
     try:
         subprocess.run([sys.executable, str(cli_path)], check=True)
     except subprocess.CalledProcessError:
-        print("❌ Erro ao executar a CLI")
+        print(">> Erro ao executar a CLI")
         input("Pressione Enter para voltar ao menu...")
     except KeyboardInterrupt:
-        print("\n⚠️ CLI fechada pelo usuário")
+        print("\n>> CLI fechada pelo usuário")
 
 
 def main():
@@ -241,11 +241,11 @@ def main():
         print()
         print("=" * 70)
         print()
-        print("    BEM-VINDO AO GERENCIADOR DE PLAYLIST!".center(70))
+        print("BEM-VINDO AO GERENCIADOR DE PLAYLIST!".center(70))
         print()
         print("=" * 70)
         print()
-        print("📦 Primeira execução detectada!")
+        print(">> Primeira execução detectada!")
         print("   Vou instalar as dependências necessárias automaticamente.")
         print()
 
@@ -253,7 +253,7 @@ def main():
 
         if resposta == 'n':
             print()
-            print("❌ Instalação cancelada.")
+            print(">> Instalação cancelada.")
             print()
             return
 
@@ -262,7 +262,7 @@ def main():
             input("Pressione Enter para sair...")
             return
 
-        print("🎉 Tudo pronto! Reiniciando o programa...")
+        print(">> Tudo pronto! Reiniciando o programa...")
         print()
         input("Pressione Enter para continuar...")
 
@@ -276,7 +276,7 @@ def main():
         mostrar_menu()
 
         try:
-            opcao = input("🎯 Escolha uma opção (1-4): ").strip()
+            opcao = input(">> Escolha uma opção (1-4): ").strip()
 
             if opcao == '1':
                 executar_gui(project_root)
@@ -288,20 +288,20 @@ def main():
                 input("\nPressione Enter para voltar ao menu...")
             elif opcao == '4':
                 print()
-                print("👋 Até logo!")
+                print(">> Até logo!")
                 print()
                 break
             else:
                 print()
-                print("❌ Opção inválida!")
+                print(">> Opção inválida!")
                 print()
                 input("Pressione Enter para tentar novamente...")
 
         except KeyboardInterrupt:
-            print("\n\n👋 Até logo!")
+            print("\n\n>> Até logo!")
             break
         except Exception as e:
-            print(f"\n❌ Erro inesperado: {e}")
+            print(f"\n>> Erro inesperado: {e}")
             input("Pressione Enter para continuar...")
 
 
