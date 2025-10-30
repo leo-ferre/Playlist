@@ -66,7 +66,7 @@ class MusicAPI:
                 'limit': 1
             }
 
-            print(f"🔍 Buscando: {query}")
+            print(f"Buscando: {query}")
 
             # Faz requisição para a iTunes API
             response = requests.get(self.itunes_base_url, params=params, timeout=10)
@@ -88,11 +88,11 @@ class MusicAPI:
                     album_nome = resultado.get('collectionName', 'unknown')
                     return self.baixar_imagem(imagem_url, album_nome)
 
-            print("❌ Nenhum resultado encontrado na API")
+            print("Nenhum resultado encontrado na API")
             return None
 
         except Exception as e:
-            print(f"❌ Erro ao buscar capa do álbum: {e}")
+            print(f"Erro ao buscar capa do álbum: {e}")
             return None
 
     def baixar_imagem(self, url, album_nome):
@@ -128,12 +128,12 @@ class MusicAPI:
 
             # Salva a imagem
             img.save(str(caminho_destino), 'PNG')
-            print(f"✅ Capa do álbum salva: {caminho_destino}")
+            print(f"Capa do álbum salva: {caminho_destino}")
 
             return str(caminho_destino)
 
         except Exception as e:
-            print(f"❌ Erro ao baixar imagem: {e}")
+            print(f"Erro ao baixar imagem: {e}")
             return None
 
     def buscar_informacoes_completas(self, titulo, artista):
@@ -229,7 +229,7 @@ class MusicAPI:
 
             except Exception as e:
                 if i == 0:  # Só mostra erro na primeira tentativa
-                    print(f"   ⚠️ Erro na busca: {e}")
+                    print(f"Erro na busca: {e}")
                 continue
 
         # Se encontrou algum resultado
@@ -245,12 +245,12 @@ class MusicAPI:
                 'preview_url': melhor_resultado.get('previewUrl', '')
             }
 
-            print(f"✅ Informações encontradas (score: {melhor_score}):")
-            print(f"   🎵 Música: {info['titulo']}")
-            print(f"   👤 Artista: {info['artista']}")
-            print(f"   📀 Álbum: {info['album']}")
-            print(f"   🎸 Gênero: {info['genero']}")
-            print(f"   📅 Ano: {info['ano']}")
+            print(f"Informações encontradas (score: {melhor_score}):")
+            print(f"Música: {info['titulo']}")
+            print(f"Artista: {info['artista']}")
+            print(f"Álbum: {info['album']}")
+            print(f"Gênero: {info['genero']}")
+            print(f"Ano: {info['ano']}")
 
             # Baixa a capa
             if info['capa_url']:
@@ -260,7 +260,7 @@ class MusicAPI:
 
             return info
 
-        print(f"❌ Nenhum resultado encontrado para '{titulo}' - '{artista}'")
+        print(f"Nenhum resultado encontrado para '{titulo}' - '{artista}'")
         print(f"   Melhor score alcançado: {melhor_score}")
         return None
 

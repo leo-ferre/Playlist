@@ -1,8 +1,3 @@
-"""
-Sistema de Gerenciamento de Playlist - Interface Gráfica
-Versão GUI com suporte a imagens de álbuns e busca automática via API
-"""
-
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog, scrolledtext
 from PIL import Image, ImageTk

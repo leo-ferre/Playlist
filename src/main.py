@@ -98,7 +98,7 @@ def adicionar_musica(playlist):
         'ano': ano
     }
 
-    # OPERAÇÃO: append() - adiciona ao final da LISTA
+    # OPERAÇÃO: append() - adiciona ao final da lista
     playlist.append(nova_musica)
 
     print(f"\n>> Música adicionada com sucesso!")
@@ -129,7 +129,7 @@ def listar_musicas(playlist):
 
 
 def buscar_musica(playlist):
-    # Busca músicas por título (busca parcial, case-insensitive).
+    # Busca músicas por título
     print("\n" + "="*50)
     print("         BUSCAR MÚSICA")
     print("="*50)
