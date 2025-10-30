@@ -85,6 +85,31 @@ Imagine;John Lennon;Imagine;Rock;1971
 Bohemian Rhapsody;Queen;A Night at the Opera;Rock;1975
 ```
 
+### ✨ Adição Manual Simplificada
+
+Você pode adicionar músicas diretamente no arquivo `playlist.txt` usando **apenas título e artista**!  
+Deixe os outros campos vazios e use o botão **"Recarregar Dados"** na interface gráfica.
+
+**Exemplo de adição manual:**
+```
+Shape of You;Ed Sheeran;;;
+Blinding Lights;The Weeknd;;;
+Levitating;Dua Lipa;;;
+```
+
+**Como funciona:**
+1. ✏️ Adicione músicas no formato `Título;Artista;;;` (sem álbum, gênero e ano)
+2. 🎨 Abra a Interface Gráfica
+3. 🔄 Clique em **"Recarregar Dados"**
+4. 🔍 O sistema detectará músicas incompletas e oferecerá buscar dados
+5. ✅ Revise e confirme os dados encontrados (álbum, gênero, ano, capa)
+
+**Busca Inteligente:**
+- 🎯 A busca usa **APENAS título e artista**
+- ✅ Funciona mesmo se você digitou álbum/ano/gênero errados
+- 🖼️ Baixa automaticamente a capa do álbum
+- 👀 Mostra prévia antes de confirmar
+
 ### Capas de Álbuns
 **Localização:** `data/album_covers/`  
 **Formato:** PNG (600x600px)

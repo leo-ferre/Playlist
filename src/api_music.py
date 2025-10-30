@@ -6,8 +6,35 @@ Suporta: iTunes API (sem necessidade de chave de autenticação)
 import requests
 from io import BytesIO
 from PIL import Image
-import os
 from pathlib import Path
+import unicodedata
+import re
+
+
+def normalizar_texto(texto):
+    """
+    Normaliza texto removendo acentos e caracteres especiais para melhorar busca.
+
+    Args:
+        texto (str): Texto a ser normalizado
+
+    Returns:
+        str: Texto normalizado
+    """
+    if not texto:
+        return ""
+
+    # Remove acentos
+    texto_nfd = unicodedata.normalize('NFD', texto)
+    texto_sem_acento = ''.join(char for char in texto_nfd if unicodedata.category(char) != 'Mn')
+
+    # Remove caracteres especiais exceto espaços e hífens
+    texto_limpo = re.sub(r'[^\w\s-]', '', texto_sem_acento)
+
+    # Remove espaços extras
+    texto_limpo = ' '.join(texto_limpo.split())
+
+    return texto_limpo
 
 
 class MusicAPI:
@@ -112,6 +139,7 @@ class MusicAPI:
     def buscar_informacoes_completas(self, titulo, artista):
         """
         Busca informações completas da música (álbum, gênero, ano, capa).
+        Tenta múltiplas estratégias de busca para aumentar chances de sucesso.
 
         Args:
             titulo (str): Título da música
@@ -120,55 +148,121 @@ class MusicAPI:
         Returns:
             dict: Dicionário com informações da música ou None
         """
-        try:
-            query = f"{artista} {titulo}"
-            params = {
-                'term': query,
-                'media': 'music',
-                'entity': 'song',
-                'limit': 1
-            }
+        # Normaliza os textos de entrada
+        titulo_norm = normalizar_texto(titulo)
+        artista_norm = normalizar_texto(artista)
 
-            print(f"🔍 Buscando informações completas: {query}")
+        # Tenta diferentes estratégias de busca
+        estrategias = [
+            # 1. Artista + Título (normalizado)
+            f"{artista_norm} {titulo_norm}",
+            # 2. Título + Artista (normalizado)
+            f"{titulo_norm} {artista_norm}",
+            # 3. Artista + Título (original)
+            f"{artista} {titulo}",
+            # 4. Título + Artista (original)
+            f"{titulo} {artista}",
+            # 5. Apenas título (normalizado)
+            titulo_norm,
+            # 6. Apenas título (original)
+            titulo,
+        ]
 
-            response = requests.get(self.itunes_base_url, params=params, timeout=10)
-            response.raise_for_status()
+        print(f"🔍 Buscando: '{titulo}' por '{artista}'")
 
-            data = response.json()
+        melhor_resultado = None
+        melhor_score = 0
 
-            if data['resultCount'] > 0:
-                resultado = data['results'][0]
+        for i, query in enumerate(estrategias):
+            if not query.strip():
+                continue
 
-                # Extrai informações
-                info = {
-                    'titulo': resultado.get('trackName', titulo),
-                    'artista': resultado.get('artistName', artista),
-                    'album': resultado.get('collectionName', 'Desconhecido'),
-                    'genero': resultado.get('primaryGenreName', 'Desconhecido'),
-                    'ano': resultado.get('releaseDate', '').split('-')[0] if resultado.get('releaseDate') else '----',
-                    'capa_url': resultado.get('artworkUrl100', '').replace('100x100', '600x600'),
-                    'preview_url': resultado.get('previewUrl', '')
+            try:
+                params = {
+                    'term': query,
+                    'media': 'music',
+                    'entity': 'song',
+                    'limit': 10  # Aumenta limite para ter mais opções
                 }
 
-                print(f"✅ Informações encontradas:")
-                print(f"   📀 Álbum: {info['album']}")
-                print(f"   🎸 Gênero: {info['genero']}")
-                print(f"   📅 Ano: {info['ano']}")
+                if i == 0:  # Só mostra a primeira tentativa
+                    print(f"   Tentando: {query}")
 
-                # Baixa a capa
-                if info['capa_url']:
-                    info['capa_path'] = self.baixar_imagem(info['capa_url'], info['album'])
-                else:
-                    info['capa_path'] = None
+                response = requests.get(self.itunes_base_url, params=params, timeout=10)
+                response.raise_for_status()
 
-                return info
+                data = response.json()
 
-            print("❌ Nenhum resultado encontrado")
-            return None
+                if data['resultCount'] > 0:
+                    # Procura o melhor match entre os resultados
+                    for resultado in data['results']:
+                        track_name = resultado.get('trackName', '').lower()
+                        artist_name = resultado.get('artistName', '').lower()
 
-        except Exception as e:
-            print(f"❌ Erro ao buscar informações: {e}")
-            return None
+                        # Calcula score de similaridade
+                        score = 0
+
+                        # Verifica se o título está presente
+                        if titulo.lower() in track_name or track_name in titulo.lower():
+                            score += 50
+                        if normalizar_texto(titulo).lower() in normalizar_texto(track_name).lower():
+                            score += 30
+
+                        # Verifica se o artista está presente
+                        if artista.lower() in artist_name or artist_name in artista.lower():
+                            score += 50
+                        if normalizar_texto(artista).lower() in normalizar_texto(artist_name).lower():
+                            score += 30
+
+                        # Atualiza melhor resultado se score for maior
+                        if score > melhor_score:
+                            melhor_score = score
+                            melhor_resultado = resultado
+
+                            # Se encontrou um match muito bom (score >= 80), para de buscar
+                            if score >= 80:
+                                break
+
+                    # Se encontrou um match razoável, para de tentar outras estratégias
+                    if melhor_score >= 80:
+                        break
+
+            except Exception as e:
+                if i == 0:  # Só mostra erro na primeira tentativa
+                    print(f"   ⚠️ Erro na busca: {e}")
+                continue
+
+        # Se encontrou algum resultado
+        if melhor_resultado and melhor_score >= 30:  # Score mínimo aceitável
+            # Extrai informações
+            info = {
+                'titulo': melhor_resultado.get('trackName', titulo),
+                'artista': melhor_resultado.get('artistName', artista),
+                'album': melhor_resultado.get('collectionName', 'Desconhecido'),
+                'genero': melhor_resultado.get('primaryGenreName', 'Desconhecido'),
+                'ano': melhor_resultado.get('releaseDate', '').split('-')[0] if melhor_resultado.get('releaseDate') else '----',
+                'capa_url': melhor_resultado.get('artworkUrl100', '').replace('100x100', '600x600'),
+                'preview_url': melhor_resultado.get('previewUrl', '')
+            }
+
+            print(f"✅ Informações encontradas (score: {melhor_score}):")
+            print(f"   🎵 Música: {info['titulo']}")
+            print(f"   👤 Artista: {info['artista']}")
+            print(f"   📀 Álbum: {info['album']}")
+            print(f"   🎸 Gênero: {info['genero']}")
+            print(f"   📅 Ano: {info['ano']}")
+
+            # Baixa a capa
+            if info['capa_url']:
+                info['capa_path'] = self.baixar_imagem(info['capa_url'], info['album'])
+            else:
+                info['capa_path'] = None
+
+            return info
+
+        print(f"❌ Nenhum resultado encontrado para '{titulo}' - '{artista}'")
+        print(f"   Melhor score alcançado: {melhor_score}")
+        return None
 
 
 # Funções auxiliares para usar diretamente

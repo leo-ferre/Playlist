@@ -241,7 +241,7 @@ def main():
         print()
         print("=" * 70)
         print()
-        print("    🎵 BEM-VINDO AO GERENCIADOR DE PLAYLIST! 🎵".center(70))
+        print("    BEM-VINDO AO GERENCIADOR DE PLAYLIST!".center(70))
         print()
         print("=" * 70)
         print()

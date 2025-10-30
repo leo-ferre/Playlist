@@ -9,6 +9,7 @@ from PIL import Image, ImageTk
 import os
 from pathlib import Path
 import unicodedata
+import threading
 
 # Importa as funções do programa original
 from main import carregar_dados, salvar_dados
@@ -20,8 +21,8 @@ class PlaylistGUI:
 
     def __init__(self, root):
         self.root = root
-        self.root.title("🎵 Gerenciador de Playlist")
-        self.root.geometry("1200x700")
+        self.root.title("Gerenciador de Playlist")
+        self.root.geometry("780x700")
         self.root.configure(bg='#1a1a2e')
 
         # Caminhos base do projeto
@@ -99,7 +100,7 @@ class PlaylistGUI:
         header_frame.pack_propagate(False)
 
         titulo = tk.Label(header_frame,
-                         text="🎵 GERENCIADOR DE PLAYLIST",
+                         text="GERENCIADOR DE PLAYLIST",
                          font=('Arial', 24, 'bold'),
                          bg=self.cores['bg_secundario'],
                          fg=self.cores['texto'])
@@ -107,11 +108,12 @@ class PlaylistGUI:
 
         # ===== CONTAINER PRINCIPAL =====
         main_container = tk.Frame(self.root, bg=self.cores['bg_principal'])
-        main_container.pack(fill='both', expand=True, padx=10, pady=10)
+        main_container.pack(fill='both', expand=True, padx=5, pady=5)
 
         # ===== PAINEL ESQUERDO (Lista de Músicas) =====
-        left_panel = tk.Frame(main_container, bg=self.cores['bg_secundario'], width=700)
-        left_panel.pack(side='left', fill='both', expand=True, padx=(0, 5))
+        left_panel = tk.Frame(main_container, bg=self.cores['bg_secundario'], width=520)
+        left_panel.pack(side='left', fill='y', padx=(0, 5))
+        left_panel.pack_propagate(False)
 
         # Título do painel
         tk.Label(left_panel,
@@ -122,7 +124,7 @@ class PlaylistGUI:
 
         # Barra de pesquisa
         search_frame = tk.Frame(left_panel, bg=self.cores['bg_secundario'])
-        search_frame.pack(fill='x', padx=10, pady=5)
+        search_frame.pack(fill='x', padx=5, pady=5)
 
         tk.Label(search_frame,
                 text="🔍 Buscar:",
@@ -143,7 +145,7 @@ class PlaylistGUI:
 
         # Canvas com scrollbar para lista de músicas
         canvas_frame = tk.Frame(left_panel, bg=self.cores['bg_secundario'])
-        canvas_frame.pack(fill='both', expand=True, padx=10, pady=10)
+        canvas_frame.pack(fill='both', expand=True, padx=5, pady=5)
 
         self.canvas = tk.Canvas(canvas_frame,
                                bg=self.cores['bg_secundario'],
@@ -162,12 +164,12 @@ class PlaylistGUI:
         self.canvas.pack(side='left', fill='both', expand=True)
         scrollbar.pack(side='right', fill='y')
 
-        # Bind para scroll com mouse
-        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
+        # Bind para scroll com mouse (multiplataforma)
+        self._bind_mousewheel()
 
         # ===== PAINEL DIREITO (Ações) =====
-        right_panel = tk.Frame(main_container, bg=self.cores['bg_secundario'], width=300)
-        right_panel.pack(side='right', fill='both', padx=(5, 0))
+        right_panel = tk.Frame(main_container, bg=self.cores['bg_secundario'], width=240)
+        right_panel.pack(side='right', fill='y', padx=(5, 0))
         right_panel.pack_propagate(False)
 
         # Título do painel
@@ -191,12 +193,12 @@ class PlaylistGUI:
                           command=comando,
                           bg=self.cores['botao'],
                           fg=self.cores['texto_botoes'],
-                          font=('Arial', 12, 'bold'),
+                          font=('Arial', 11, 'bold'),
                           relief='flat',
                           cursor='hand2',
                           activebackground=self.cores['botao_hover'],
                           activeforeground=self.cores['texto_botoes'])
-            btn.pack(pady=10, padx=20, fill='x')
+            btn.pack(pady=8, padx=10, fill='x')
 
             # Efeito hover
             btn.bind('<Enter>', lambda e, b=btn: b.config(bg=self.cores['botao_hover']))
@@ -204,7 +206,7 @@ class PlaylistGUI:
 
         # Estatísticas
         stats_frame = tk.Frame(right_panel, bg=self.cores['bg_card'], relief='ridge', bd=2)
-        stats_frame.pack(pady=20, padx=20, fill='x')
+        stats_frame.pack(pady=15, padx=10, fill='x')
 
         tk.Label(stats_frame,
                 text="📈 ESTATÍSTICAS",
@@ -222,9 +224,58 @@ class PlaylistGUI:
 
         self.atualizar_estatisticas()
 
+    def _bind_mousewheel(self):
+        """Configura o scroll do mouse/trackpad de forma multiplataforma"""
+        import platform
+        self.sistema = platform.system()
+
+        # Bind para entrar/sair da área do canvas
+        self.canvas.bind('<Enter>', self._on_enter)
+        self.canvas.bind('<Leave>', self._on_leave)
+        self.scrollable_frame.bind('<Enter>', self._on_enter)
+        self.scrollable_frame.bind('<Leave>', self._on_leave)
+
+    def _on_enter(self, event):
+        """Ativa scroll quando mouse entra na área"""
+        # macOS (funciona com mouse e trackpad)
+        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
+        # Linux
+        self.canvas.bind_all("<Button-4>", self._on_mousewheel)
+        self.canvas.bind_all("<Button-5>", self._on_mousewheel)
+
+    def _on_leave(self, event):
+        """Desativa scroll quando mouse sai da área"""
+        # macOS
+        self.canvas.unbind_all("<MouseWheel>")
+        # Linux
+        self.canvas.unbind_all("<Button-4>")
+        self.canvas.unbind_all("<Button-5>")
+
     def _on_mousewheel(self, event):
-        """Handler para scroll com mouse"""
-        self.canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        """Handler para scroll com mouse/trackpad (multiplataforma)"""
+        # Linux - usa Button-4 e Button-5
+        if hasattr(event, 'num'):
+            if event.num == 4:
+                self.canvas.yview_scroll(-1, "units")
+                return
+            elif event.num == 5:
+                self.canvas.yview_scroll(1, "units")
+                return
+
+        # macOS e Windows - usa event.delta
+        # No macOS com trackpad, delta pode ser qualquer valor (não apenas 120/-120)
+        if hasattr(event, 'delta'):
+            if self.sistema == 'Darwin':  # macOS
+                # No macOS, delta pode ser valores pequenos (trackpad) ou grandes (mouse)
+                # Normaliza para funcionar bem com ambos
+                delta = event.delta
+                if delta > 0:
+                    self.canvas.yview_scroll(-1, "units")
+                elif delta < 0:
+                    self.canvas.yview_scroll(1, "units")
+            else:  # Windows
+                # No Windows, delta é geralmente 120 ou -120
+                self.canvas.yview_scroll(-1 * int(event.delta / 120), "units")
 
     def carregar_imagem_album(self, musica):
         """Carrega a imagem do álbum ou retorna imagem padrão"""
@@ -287,11 +338,11 @@ class PlaylistGUI:
                        bg=self.cores['bg_card'],
                        relief='raised',
                        bd=2)
-        card.pack(fill='x', padx=5, pady=5)
+        card.pack(fill='x', padx=3, pady=3)
 
         # Frame para imagem
         img_frame = tk.Frame(card, bg=self.cores['bg_card'])
-        img_frame.pack(side='left', padx=10, pady=10)
+        img_frame.pack(side='left', padx=5, pady=5)
 
         # Carrega e exibe imagem do álbum
         foto = self.carregar_imagem_album(musica)
@@ -300,8 +351,9 @@ class PlaylistGUI:
         img_label.pack()
 
         # Frame para informações
-        info_frame = tk.Frame(card, bg=self.cores['bg_card'])
-        info_frame.pack(side='left', fill='both', expand=True, padx=10, pady=10)
+        info_frame = tk.Frame(card, bg=self.cores['bg_card'], width=240)
+        info_frame.pack(side='left', fill='y', padx=5, pady=5)
+        info_frame.pack_propagate(False)
 
         # Título
         tk.Label(info_frame,
@@ -336,8 +388,8 @@ class PlaylistGUI:
                 anchor='w').pack(fill='x')
 
         # Frame para botões de ação
-        btn_frame = tk.Frame(card, bg=self.cores['bg_card'])
-        btn_frame.pack(side='right', padx=10)
+        btn_frame = tk.Frame(card, bg=self.cores['bg_card'], width=100)
+        btn_frame.pack(side='right', padx=5, pady=5)
 
         # Botão Editar
         btn_editar = tk.Button(btn_frame,
@@ -345,9 +397,10 @@ class PlaylistGUI:
                               command=lambda m=musica: self.editar_musica(m),
                               bg='#4CAF50',
                               fg=self.cores['texto_botoes'],
-                              font=('Arial', 10, 'bold'),
+                              font=('Arial', 9, 'bold'),
                               relief='flat',
                               cursor='hand2',
+                              width=8,
                               activeforeground=self.cores['texto_botoes'])
         btn_editar.pack(pady=2)
 
@@ -357,9 +410,10 @@ class PlaylistGUI:
                                command=lambda m=musica: self.remover_musica(m),
                                bg='#f44336',
                                fg=self.cores['texto_botoes'],
-                               font=('Arial', 10, 'bold'),
+                               font=('Arial', 9, 'bold'),
                                relief='flat',
                                cursor='hand2',
+                               width=8,
                                activeforeground=self.cores['texto_botoes'])
         btn_remover.pack(pady=2)
 
@@ -369,9 +423,10 @@ class PlaylistGUI:
                               command=lambda m=musica: self.trocar_imagem(m),
                               bg='#2196F3',
                               fg=self.cores['texto_botoes'],
-                              font=('Arial', 10, 'bold'),
+                              font=('Arial', 9, 'bold'),
                               relief='flat',
                               cursor='hand2',
+                              width=8,
                               activeforeground=self.cores['texto_botoes'])
         btn_imagem.pack(pady=2)
 
@@ -893,11 +948,302 @@ class PlaylistGUI:
         messagebox.showinfo("Sucesso", "Playlist salva com sucesso!")
 
     def recarregar_dados(self):
-        """Recarrega os dados do arquivo"""
+        """Recarrega os dados do arquivo e busca informações faltantes via API"""
+        # Recarrega dados do arquivo
         self.playlist = carregar_dados(self.nome_arquivo)
+
+        # Verifica músicas com dados incompletos (apenas baseado em título e artista)
+        musicas_incompletas = []
+        for musica in self.playlist:
+            # Verifica se tem título e artista (requisitos mínimos)
+            if not musica.get('titulo') or not musica.get('artista'):
+                continue  # Pula músicas sem título ou artista
+
+            # Considera incompleta se não tiver álbum, ano ou gênero definido
+            # Busca SEMPRE para esses campos, mesmo que estejam preenchidos incorretamente
+            if (musica.get('album') in [None, '', 'Desconhecido', '----'] or
+                musica.get('ano') in [None, '', '----'] or
+                musica.get('genero') in [None, '', 'Desconhecido']):
+                musicas_incompletas.append(musica)
+
+        if musicas_incompletas:
+            # Pergunta se deseja buscar dados
+            resposta = messagebox.askyesno(
+                "Dados Incompletos Encontrados",
+                f"Encontrei {len(musicas_incompletas)} música(s) com dados incompletos.\n\n"
+                "A busca será feita usando apenas:\n"
+                "  • Título da música\n"
+                "  • Nome do artista\n\n"
+                "Deseja buscar informações na internet para completar os dados?"
+            )
+
+            if resposta:
+                self.buscar_dados_faltantes(musicas_incompletas)
+                self.imagens_cache.clear()
+                self.atualizar_lista()
+                return  # Não mostra a mensagem "Dados recarregados" pois já foi mostrada
+        else:
+            # Nenhuma música incompleta
+            messagebox.showinfo(
+                "Dados Completos",
+                "✅ Todas as músicas já possuem dados completos!\n\n"
+                "Para recarregar dados mesmo assim, você pode:\n"
+                "1. Editar uma música e limpar os campos que deseja atualizar\n"
+                "2. Clicar em 'Recarregar Dados' novamente"
+            )
+
         self.imagens_cache.clear()
         self.atualizar_lista()
-        messagebox.showinfo("Sucesso", "Dados recarregados!")
+
+    def buscar_dados_faltantes(self, musicas_incompletas):
+        """Busca dados faltantes via API e confirma com o usuário"""
+        import threading
+
+        # Cria janela de progresso
+        janela_progresso = tk.Toplevel(self.root)
+        janela_progresso.title("Buscando Informações")
+        janela_progresso.geometry("400x150")
+        janela_progresso.configure(bg=self.cores['bg_secundario'])
+        janela_progresso.transient(self.root)
+        janela_progresso.grab_set()
+
+        # Centraliza janela
+        janela_progresso.update_idletasks()
+        x = (janela_progresso.winfo_screenwidth() // 2) - (400 // 2)
+        y = (janela_progresso.winfo_screenheight() // 2) - (150 // 2)
+        janela_progresso.geometry(f"400x150+{x}+{y}")
+
+        tk.Label(janela_progresso,
+                text="🔍 Buscando informações na API...",
+                font=('Arial', 12, 'bold'),
+                bg=self.cores['bg_secundario'],
+                fg=self.cores['texto_claro']).pack(pady=20)
+
+        label_progresso = tk.Label(janela_progresso,
+                                   text="Aguarde...",
+                                   font=('Arial', 10),
+                                   bg=self.cores['bg_secundario'],
+                                   fg=self.cores['texto_claro'])
+        label_progresso.pack(pady=10)
+
+        def buscar_async():
+            atualizadas = 0
+            nao_encontradas = []
+
+            for i, musica in enumerate(musicas_incompletas):
+                # Atualiza label de progresso
+                label_progresso.config(
+                    text=f"Buscando {i+1} de {len(musicas_incompletas)}...\n{musica['titulo']} - {musica['artista']}"
+                )
+                janela_progresso.update()
+
+                # Busca informações usando APENAS título e artista
+                # Isso garante que mesmo com álbum/ano/gênero errados, encontrará dados corretos
+                info = buscar_informacoes_musica(musica['titulo'], musica['artista'])
+
+                if info:
+                    # Mostra janela de confirmação
+                    janela_progresso.withdraw()
+
+                    if self.confirmar_atualizacao_dados(musica, info):
+                        # Atualiza dados da música
+                        musica['album'] = info['album']
+                        musica['genero'] = info['genero']
+                        musica['ano'] = info['ano']
+                        atualizadas += 1
+
+                    janela_progresso.deiconify()
+                else:
+                    # Música não encontrada
+                    nao_encontradas.append(f"• {musica['titulo']} - {musica['artista']}")
+
+            janela_progresso.destroy()
+
+            # Salva alterações
+            if atualizadas > 0:
+                salvar_dados(self.playlist, self.nome_arquivo)
+
+            # Monta mensagem de resultado
+            mensagem = ""
+            if atualizadas > 0:
+                mensagem += f"✅ {atualizadas} música(s) atualizada(s) com sucesso!\n"
+
+            if nao_encontradas:
+                mensagem += f"\n⚠️ {len(nao_encontradas)} música(s) não encontrada(s) na API:\n\n"
+                # Limita a 10 músicas para não ficar muito grande
+                mensagem += "\n".join(nao_encontradas[:10])
+                if len(nao_encontradas) > 10:
+                    mensagem += f"\n... e mais {len(nao_encontradas) - 10} música(s)"
+                mensagem += "\n\n💡 Dica: Verifique se o nome e artista estão corretos."
+
+            if not mensagem:
+                mensagem = "Nenhuma música foi atualizada."
+
+            titulo_janela = "Atualização Concluída" if atualizadas > 0 else "Busca Concluída"
+            messagebox.showinfo(titulo_janela, mensagem)
+
+        # Executa busca em thread separada para não travar a interface
+        thread = threading.Thread(target=buscar_async)
+        thread.daemon = True
+        thread.start()
+
+    def confirmar_atualizacao_dados(self, musica_antiga, info_nova):
+        """Mostra janela de confirmação comparando dados antigos e novos"""
+        janela = tk.Toplevel(self.root)
+        janela.title("Confirmar Atualização")
+        janela.geometry("600x500")
+        janela.configure(bg=self.cores['bg_secundario'])
+        janela.transient(self.root)
+        janela.grab_set()
+
+        # Centraliza janela
+        janela.update_idletasks()
+        x = (janela.winfo_screenwidth() // 2) - (600 // 2)
+        y = (janela.winfo_screenheight() // 2) - (500 // 2)
+        janela.geometry(f"600x500+{x}+{y}")
+
+        # Título
+        tk.Label(janela,
+                text="📊 Informações Encontradas",
+                font=('Arial', 16, 'bold'),
+                bg=self.cores['bg_secundario'],
+                fg=self.cores['texto']).pack(pady=15)
+
+        # Frame principal com scroll
+        canvas = tk.Canvas(janela, bg=self.cores['bg_secundario'], highlightthickness=0)
+        scrollbar = ttk.Scrollbar(janela, orient='vertical', command=canvas.yview)
+        frame_scroll = tk.Frame(canvas, bg=self.cores['bg_secundario'])
+
+        frame_scroll.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+
+        canvas.create_window((0, 0), window=frame_scroll, anchor='nw')
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side='left', fill='both', expand=True, padx=10)
+        scrollbar.pack(side='right', fill='y')
+
+        # Frame de comparação
+        frame_info = tk.Frame(frame_scroll, bg=self.cores['bg_card'], relief='ridge', bd=2)
+        frame_info.pack(pady=10, padx=10, fill='both')
+
+        # Música
+        tk.Label(frame_info,
+                text=f"🎵 {musica_antiga['titulo']}",
+                font=('Arial', 14, 'bold'),
+                bg=self.cores['bg_card'],
+                fg=self.cores['texto']).pack(pady=10)
+
+        tk.Label(frame_info,
+                text=f"👤 {musica_antiga['artista']}",
+                font=('Arial', 12),
+                bg=self.cores['bg_card'],
+                fg=self.cores['texto_claro']).pack(pady=5)
+
+        # Dados atuais vs novos
+        comparacao = [
+            ("Álbum", musica_antiga.get('album', '----'), info_nova['album']),
+            ("Gênero", musica_antiga.get('genero', '----'), info_nova['genero']),
+            ("Ano", musica_antiga.get('ano', '----'), info_nova['ano'])
+        ]
+
+        for campo, antigo, novo in comparacao:
+            frame_campo = tk.Frame(frame_info, bg=self.cores['bg_card'])
+            frame_campo.pack(fill='x', padx=20, pady=8)
+
+            tk.Label(frame_campo,
+                    text=f"{campo}:",
+                    font=('Arial', 11, 'bold'),
+                    bg=self.cores['bg_card'],
+                    fg=self.cores['texto_claro'],
+                    width=10,
+                    anchor='w').pack(side='left')
+
+            # Valor antigo
+            tk.Label(frame_campo,
+                    text=str(antigo) if antigo else '----',
+                    font=('Arial', 10),
+                    bg=self.cores['bg_card'],
+                    fg='#888888',
+                    width=20,
+                    anchor='w').pack(side='left', padx=5)
+
+            tk.Label(frame_campo,
+                    text="→",
+                    font=('Arial', 12, 'bold'),
+                    bg=self.cores['bg_card'],
+                    fg=self.cores['texto']).pack(side='left', padx=5)
+
+            # Valor novo
+            tk.Label(frame_campo,
+                    text=str(novo),
+                    font=('Arial', 10, 'bold'),
+                    bg=self.cores['bg_card'],
+                    fg='#4CAF50',
+                    width=20,
+                    anchor='w').pack(side='left', padx=5)
+
+        # Mostra prévia da capa se disponível
+        if info_nova.get('capa_path'):
+            try:
+                img = Image.open(info_nova['capa_path'])
+                img = img.resize((150, 150), Image.Resampling.LANCZOS)
+                photo = ImageTk.PhotoImage(img)
+
+                tk.Label(frame_info,
+                        text="🖼️ Capa do Álbum:",
+                        font=('Arial', 11, 'bold'),
+                        bg=self.cores['bg_card'],
+                        fg=self.cores['texto_claro']).pack(pady=10)
+
+                img_label = tk.Label(frame_info, image=photo, bg=self.cores['bg_card'])
+                img_label.image = photo  # Mantém referência
+                img_label.pack(pady=10)
+            except Exception as e:
+                print(f"Erro ao carregar prévia da imagem: {e}")
+
+        # Frame de botões
+        frame_botoes = tk.Frame(janela, bg=self.cores['bg_secundario'])
+        frame_botoes.pack(pady=20)
+
+        resultado = {'confirmado': False}
+
+        def confirmar():
+            resultado['confirmado'] = True
+            janela.destroy()
+
+        def cancelar():
+            resultado['confirmado'] = False
+            janela.destroy()
+
+        btn_confirmar = tk.Button(frame_botoes,
+                                  text="✅ Usar Estes Dados",
+                                  command=confirmar,
+                                  bg='#4CAF50',
+                                  fg='#000000',
+                                  font=('Arial', 12, 'bold'),
+                                  relief='flat',
+                                  cursor='hand2',
+                                  width=18)
+        btn_confirmar.pack(side='left', padx=10)
+
+        btn_cancelar = tk.Button(frame_botoes,
+                                text="❌ Manter Original",
+                                command=cancelar,
+                                bg='#f44336',
+                                fg='#000000',
+                                font=('Arial', 12, 'bold'),
+                                relief='flat',
+                                cursor='hand2',
+                                width=18)
+        btn_cancelar.pack(side='left', padx=10)
+
+        # Aguarda janela fechar
+        janela.wait_window()
+
+        return resultado['confirmado']
 
     def atualizar_estatisticas(self):
         """Atualiza as estatísticas exibidas"""
