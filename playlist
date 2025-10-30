@@ -1,0 +1,156 @@
+#!/usr/bin/env bash
+
+# Script principal do Sistema de Playlist
+# Organiza todas as opções de execução em um único lugar
+
+# Diretório do projeto
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Garante que as pastas existem
+mkdir -p "$PROJECT_DIR/src"
+mkdir -p "$PROJECT_DIR/data/album_covers"
+mkdir -p "$PROJECT_DIR/docs"
+
+# Função para exibir o cabeçalho
+show_header() {
+    # Limpa apenas se saída for um terminal interativo
+    if [ -t 1 ]; then
+        clear
+    fi
+    echo "════════════════════════════════════════════════════════════"
+    echo "                                                            "
+    echo "            SISTEMA DE GERENCIAMENTO DE PLAYLIST            "
+    echo "                                                            "
+    echo "════════════════════════════════════════════════════════════"
+    echo ""
+}
+
+# Função para exibir o menu
+show_menu() {
+    echo "────────────────────────────────────────────────────────────"
+    echo "                    📋 OPÇÕES DISPONÍVEIS                   "
+    echo "────────────────────────────────────────────────────────────"
+    echo ""
+    echo "  1. 🎨 Interface Gráfica"
+    echo "  2. 💻 Linha de Comando (Básico)"
+    echo "  3. 📚 Ver Documentação"
+    echo "  4. 🚪 Sair"
+    echo ""
+    echo "────────────────────────────────────────────────────────────"
+    echo ""
+}
+
+# Detecta um Python com suporte a tkinter (prioriza Homebrew no macOS)
+find_python_with_tk() {
+    local candidates=()
+    # Permite o usuário sobrescrever via variável de ambiente
+    [[ -n "$PYTHON_GUI" ]] && candidates+=("$PYTHON_GUI")
+    # Candidatos comuns (ordem de preferência)
+    candidates+=(
+        "/opt/homebrew/bin/python3"    # Homebrew (Apple Silicon)
+        "/usr/local/bin/python3"       # Homebrew (Intel)
+        "/usr/bin/python3"             # Python do sistema (macOS)
+        "$(command -v pythonw3)"       # pythonw em alguns Setups macOS
+        "$(command -v pythonw)"
+        "$(command -v python3)"
+        "$(command -v python)"
+    )
+
+    # Se brew existir, adiciona intérpretes do Homebrew conhecidos
+    if command -v brew >/dev/null 2>&1; then
+        for f in python@3.14 python@3.13 python; do
+            local pfx
+            pfx="$(brew --prefix "$f" 2>/dev/null || true)"
+            if [[ -n "$pfx" && -x "$pfx/bin/python3" ]]; then
+                candidates+=("$pfx/bin/python3")
+            fi
+        done
+    fi
+
+    for py in "${candidates[@]}"; do
+        # Ignora vazios ou não executáveis
+        [[ -z "$py" ]] && continue
+        [[ -x "$py" || "$py" == python* ]] || continue
+        # Testa import do tkinter e retorna o executável real
+        local out
+        out="$($py - <<'PY'
+import sys
+try:
+    import tkinter  # noqa: F401
+    print(sys.executable)
+except Exception:
+    pass
+PY
+)"
+        if [[ -n "$out" ]]; then
+            echo "$out"
+            return 0
+        fi
+    done
+    return 1
+}
+
+# Loop principal
+while true; do
+    show_header
+    show_menu
+
+    read -p "🎯 Escolha uma opção (1-4): " choice
+
+    case $choice in
+        1)
+            echo ""
+            echo "🎨 Iniciando Interface Gráfica..."
+            echo ""
+
+            PY_GUI="$(find_python_with_tk)"
+            if [[ -n "$PY_GUI" ]]; then
+                echo "🔎 Usando interpretador: $PY_GUI"
+                cd "$PROJECT_DIR" && "$PY_GUI" src/main_gui.py
+            else
+                echo "❌ Erro: nenhum interpretador Python com tkinter foi encontrado no sistema."
+                echo "💡 Dicas:"
+                echo "   • macOS (Homebrew): brew install python-tk"
+                echo "   • Ubuntu/Debian:   sudo apt-get install python3-tk"
+                echo "   • Fedora:           sudo dnf install python3-tkinter"
+                echo "   • Ou defina PYTHON_GUI apontando para o Python com tkinter. Ex.:"
+                echo "       PYTHON_GUI=/opt/homebrew/bin/python3 ./playlist"
+                echo ""
+                read -p "Pressione Enter para voltar ao menu..."
+            fi
+            ;;
+        2)
+            echo ""
+            echo "💻 Iniciando Modo Linha de Comando..."
+            echo ""
+            cd "$PROJECT_DIR" && python3 src/main.py
+            ;;
+        3)
+            echo ""
+            echo "📚 Abrindo documentação..."
+            echo ""
+            if command -v open >/dev/null 2>&1; then
+                open "$PROJECT_DIR/docs/README.md"
+            elif command -v xdg-open >/dev/null 2>&1; then
+                xdg-open "$PROJECT_DIR/docs/README.md"
+            else
+                echo "📄 Documentação disponível em:"
+                echo "   $PROJECT_DIR/docs/README.md"
+            fi
+            echo ""
+            read -p "Pressione Enter para voltar ao menu..."
+            ;;
+        4)
+            echo ""
+            echo "👋 Até logo!"
+            echo ""
+            exit 0
+            ;;
+        *)
+            echo ""
+            echo "❌ Opção inválida!"
+            echo ""
+            read -p "Pressione Enter para tentar novamente..."
+            ;;
+    esac
+done
