@@ -1,10 +1,10 @@
-# 📚 Sistema de Gerenciamento de Playlist
+# Sistema de Gerenciamento de Playlist
 
 ---
 
-## 📖 Documentos Disponíveis
+## Documentos Disponíveis
 
-### 🎯 [GUIA_COMPLETO.md](GUIA_COMPLETO.md)
+### [GUIA_COMPLETO.md](GUIA_COMPLETO.md)
 **Guia detalhado com tudo que você precisa saber:**
 - ✅ Instalação passo a passo
 - ✅ Como usar cada funcionalidade
@@ -37,22 +37,23 @@ python3 playlist.py       # macOS/Linux
 
 ---
 
-## ✨ Principais Funcionalidades
+## Principais Funcionalidades
 
-### 🎵 Gerenciamento de Músicas
-- ➕ Adicionar músicas (manual ou automático)
-- 📚 Listar com visualização de capas
-- 🔍 Buscar de forma inteligente
-- ✏️ Editar informações
-- 🗑️ Remover com confirmação
+### Gerenciamento de Músicas
+- Adicionar músicas (manual ou automático)
+- Listar com visualização de capas
+- Buscar de forma inteligente
+- Editar informações
+- Gerar Relatórios
+- Remover com confirmação
 
 ### 🌐 Busca Automática (iTunes API)
-- 📀 Nome do álbum
-- 🎸 Gênero musical
-- 📅 Ano de lançamento
-- 🖼️ Capa do álbum (600x600px)
+- Nome do álbum
+- Gênero musical
+- Ano de lançamento
+- Capa do álbum (600x600px)
 
-### 📊 Relatórios e Estatísticas
+### Relatórios e Estatísticas
 - Filtros por título, artista, álbum, gênero, ano
 - Estatísticas da playlist
 - Exportação de dados
@@ -117,20 +118,20 @@ blindside;GhostDragom;;
 ## ❓ Problemas Comuns
 
 ### Python não encontrado?
-👉 [Guia Completo - Instalação](GUIA_COMPLETO.md#instalação)
+[Guia Completo - Instalação](GUIA_COMPLETO.md#instalação)
 
 ### tkinter não funciona?
-👉 [Guia Completo - Solução: tkinter](GUIA_COMPLETO.md#problema-tkinter-não-encontrado)
+[Guia Completo - Solução: tkinter](GUIA_COMPLETO.md#problema-tkinter-não-encontrado)
 
 ### Busca automática não funciona?
-👉 [Guia Completo - Busca Automática](GUIA_COMPLETO.md#busca-automática-de-músicas)
+[Guia Completo - Busca Automática](GUIA_COMPLETO.md#busca-automática-de-músicas)
 
 ### Dependências não instalam?
-👉 [Guia Completo - Solução: Dependências](GUIA_COMPLETO.md#problema-dependências-não-instalam)
+[Guia Completo - Solução: Dependências](GUIA_COMPLETO.md#problema-dependências-não-instalam)
 
 ---
 
-## 🎨 Interfaces
+## Interfaces
 
 ### Interface Gráfica (GUI)
 - 🖼️ Cards visuais com capas
@@ -147,7 +148,7 @@ blindside;GhostDragom;;
 ---
 
 **Para informações detalhadas, consulte:**
-📖 [GUIA_COMPLETO.md](GUIA_COMPLETO.md)
+[GUIA_COMPLETO.md](GUIA_COMPLETO.md)
 
 **Seções principais do guia:**
 1. Visão Geral
@@ -168,14 +169,6 @@ blindside;GhostDragom;;
 - **Pillow** - Processamento de imagens
 - **requests** - HTTP
 - **iTunes Search API** - Dados musicais
-
----
-
-## 📄 Licença
-
-Este projeto é de código aberto para fins educacionais.
-
----
 
 **🎵 Boa música! 🎶**
 
