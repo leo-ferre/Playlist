@@ -47,7 +47,7 @@ python3 playlist.py       # macOS/Linux
 - Gerar Relatórios
 - Remover com confirmação
 
-### 🌐 Busca Automática (iTunes API)
+### Busca Automática (iTunes API)
 - Nome do álbum
 - Gênero musical
 - Ano de lançamento
