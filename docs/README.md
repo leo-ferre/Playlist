@@ -1,4 +1,4 @@
-# 📚 Documentação - Sistema de Gerenciamento de Playlist
+# 📚 Sistema de Gerenciamento de Playlist
 
 ---
 
@@ -9,16 +9,14 @@
 - ✅ Instalação passo a passo
 - ✅ Como usar cada funcionalidade
 - ✅ Interface Gráfica e CLI detalhadas
-- ✅ Busca automática de músicas
+- ✅ Busca automática de músicas via API
 - ✅ Solução de problemas
 - ✅ Perguntas frequentes
 - ✅ Exemplos práticos
 
-👉 **Recomendado para iniciantes e para consulta completa!**
-
 ---
 
-## 🚀 Início Rápido
+## Início Rápido
 
 ### Windows
 ```cmd
@@ -61,14 +59,14 @@ python3 playlist.py       # macOS/Linux
 
 ---
 
-## 🛠️ Requisitos
+## Requisitos
 
 - **Python 3.8+**
 - **Pillow** - Processamento de imagens
 - **requests** - Chamadas à API
 - **tkinter** - Interface gráfica (opcional)
 
-> ✅ Os launchers instalam tudo automaticamente!
+> Os launchers instalam tudo automaticamente!
 
 ---
 
@@ -85,30 +83,30 @@ Imagine;John Lennon;Imagine;Rock;1971
 Bohemian Rhapsody;Queen;A Night at the Opera;Rock;1975
 ```
 
-### ✨ Adição Manual Simplificada
+### Adição Manual Simplificada
 
 Você pode adicionar músicas diretamente no arquivo `playlist.txt` usando **apenas título e artista**!  
 Deixe os outros campos vazios e use o botão **"Recarregar Dados"** na interface gráfica.
 
 **Exemplo de adição manual:**
 ```
-Shape of You;Ed Sheeran;;;
-Blinding Lights;The Weeknd;;;
-Levitating;Dua Lipa;;;
+Bittersweet;Audien;;;
+Fuck it, Im Alright;SABAI;;;
+blindside;GhostDragom;;
 ```
 
 **Como funciona:**
-1. ✏️ Adicione músicas no formato `Título;Artista;;;` (sem álbum, gênero e ano)
-2. 🎨 Abra a Interface Gráfica
-3. 🔄 Clique em **"Recarregar Dados"**
-4. 🔍 O sistema detectará músicas incompletas e oferecerá buscar dados
-5. ✅ Revise e confirme os dados encontrados (álbum, gênero, ano, capa)
+1. Adicione músicas no formato `Título;Artista;;;` (sem álbum, gênero e ano)
+2. Abra a Interface Gráfica
+3. Clique em **"Recarregar Dados"**
+4. O sistema detectará músicas incompletas e oferecerá buscar dados
+5. Revise e confirme os dados encontrados (álbum, gênero, ano, capa)
 
 **Busca Inteligente:**
-- 🎯 A busca usa **APENAS título e artista**
-- ✅ Funciona mesmo se você digitou álbum/ano/gênero errados
-- 🖼️ Baixa automaticamente a capa do álbum
-- 👀 Mostra prévia antes de confirmar
+- A busca usa **APENAS título e artista**
+- Funciona mesmo se você digitou álbum/ano/gênero errados
+- Baixa automaticamente a capa do álbum
+- Mostra prévia antes de confirmar
 
 ### Capas de Álbuns
 **Localização:** `data/album_covers/`  
@@ -148,8 +146,6 @@ Levitating;Dua Lipa;;;
 
 ---
 
-## 📞 Suporte
-
 **Para informações detalhadas, consulte:**
 📖 [GUIA_COMPLETO.md](GUIA_COMPLETO.md)
 
@@ -165,7 +161,7 @@ Levitating;Dua Lipa;;;
 
 ---
 
-## 🎓 Tecnologias
+## Tecnologias
 
 - **Python 3.8+**
 - **Tkinter** - GUI multiplataforma
