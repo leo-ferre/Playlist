@@ -1,3 +1,9 @@
+"""
+NOMES
+Leonardo Ferreira
+Heloi Vecchi Sgarbi
+Kaua Schiavolin Monteiro
+"""
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog, scrolledtext
 from PIL import Image, ImageTk

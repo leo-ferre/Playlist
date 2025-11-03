@@ -1,4 +1,9 @@
 """
+NOMES
+Leonardo Ferreira
+Heloi Vecchi Sgarbi
+Kaua Schiavolin Monteiro
+
 Módulo para buscar informações de músicas e capas de álbuns via APIs
 Suporta: iTunes API (sem necessidade de chave de autenticação)
 """

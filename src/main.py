@@ -1,3 +1,9 @@
+"""
+NOMES
+Leonardo Ferreira
+Heloi Vecchi Sgarbi
+Kaua Schiavolin Monteiro
+"""
 from pathlib import Path
 
 def carregar_dados(nome_arquivo="playlist.txt"):
