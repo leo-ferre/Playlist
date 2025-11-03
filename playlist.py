@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 """
+NOMES
+Leonardo Ferreira
+Heloi Vecchi Sgarbi
+Kaua Schiavolin Monteiro
+
 Launcher multiplataforma para o Sistema de Gerenciamento de Playlist
-Funciona em Windows, macOS e Linux
-COM INSTALADOR INTEGRADO - instala tudo automaticamente na primeira execução
 """
 
 import os
 import sys
 import subprocess
 from pathlib import Path
-
 
 def limpar_tela():
     """Limpa a tela do terminal de forma segura"""
