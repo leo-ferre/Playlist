@@ -125,10 +125,10 @@ Ao executar pela primeira vez, você verá o menu principal:
                   OPÇÕES DISPONÍVEIS
 ------------------------------------------------------------
 
-  1. 🎨 Interface Gráfica
-  2. 💻 Linha de Comando (CLI)
-  3. 📚 Ver Documentação
-  4. 🚪 Sair
+  1. Interface Gráfica
+  2. Linha de Comando (CLI)
+  3. Ver Documentação
+  4. Sair
 
 ------------------------------------------------------------
 
@@ -379,7 +379,7 @@ Total de 2 música(s) encontrada(s):
 
 ---
 
-## 🔍 Busca Automática de Músicas
+## Busca Automática de Músicas
 
 ### Como Funciona:
 
@@ -397,7 +397,7 @@ O sistema utiliza a **iTunes Search API** para buscar informações:
 
 ---
 
-## 🛠️ Solução de Problemas
+## Solução de Problemas
 
 ### Problema: "Python não encontrado"
 
