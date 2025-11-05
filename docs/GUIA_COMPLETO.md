@@ -1,4 +1,4 @@
-# 🎵 Guia Completo - Sistema de Gerenciamento de Playlist
+# Guia Completo - Sistema de Gerenciamento de Playlist
 
 **Versão:** 1.0  
 **Data:** Outubro 2025  
@@ -6,7 +6,7 @@
 
 ---
 
-## 📋 Índice
+## Índice
 
 1. [Visão Geral](#visão-geral)
 2. [Instalação](#instalação)
@@ -20,12 +20,12 @@
 
 ---
 
-## 🎯 Visão Geral
+## Visão Geral
 
 O **Sistema de Gerenciamento de Playlist** é uma aplicação completa para organizar suas músicas favoritas. Desenvolvido em Python, oferece duas interfaces:
 
-- **🎨 Interface Gráfica (GUI)** - Visual, moderna e intuitiva
-- **💻 Interface de Linha de Comando (CLI)** - Rápida e direta
+- **Interface Gráfica (GUI)** - Visual, moderna e intuitiva
+- **Interface de Linha de Comando (CLI)** - Rápida e direta
 
 ### Principais Recursos:
 
@@ -40,7 +40,7 @@ O **Sistema de Gerenciamento de Playlist** é uma aplicação completa para orga
 
 ---
 
-## 💻 Instalação
+## Instalação
 
 ### Requisitos Mínimos:
 
@@ -50,7 +50,7 @@ O **Sistema de Gerenciamento de Playlist** é uma aplicação completa para orga
 
 ### Instalação Simplificada:
 
-#### 🪟 Windows
+#### Windows
 
 1. **Execute o launcher:**
    - Duplo-clique em `executar_windows.bat`
@@ -68,7 +68,7 @@ O **Sistema de Gerenciamento de Playlist** é uma aplicação completa para orga
      - ☑️ Add Python to PATH
      - ☑️ Install tcl/tk and IDLE
 
-#### 🍎 macOS / Linux
+#### macOS / Linux
 
 1. **Execute o launcher:**
    ```bash
@@ -94,7 +94,7 @@ O **Sistema de Gerenciamento de Playlist** é uma aplicação completa para orga
    sudo dnf install python3-tkinter
    ```
 
-#### 🐍 Instalação Manual (Alternativa)
+#### Instalação Manual (Alternativa)
 
 ```bash
 # Clone ou baixe o projeto
@@ -110,7 +110,7 @@ python3 playlist.py       # macOS/Linux
 
 ---
 
-## 🚀 Como Usar
+## Como Usar
 
 ### Primeira Execução
 
@@ -132,18 +132,18 @@ Ao executar pela primeira vez, você verá o menu principal:
 
 ------------------------------------------------------------
 
-🎯 Escolha uma opção (1-4):
+Escolha uma opção (1-4):
 ```
 
 ### Opção 1: Interface Gráfica (GUI)
 
 A interface gráfica oferece a melhor experiência visual:
 
-- 📸 **Visualização de capas** de álbuns
-- 🎨 **Design moderno** e intuitivo
-- 🔍 **Busca em tempo real** enquanto você digita
-- 🖱️ **Operações com cliques** simples
-- 📊 **Estatísticas visuais** da playlist
+- **Visualização de capas** de álbuns
+- **Design moderno** e intuitivo
+- **Busca em tempo real** enquanto você digita
+- **Operações com cliques** simples
+- **Estatísticas visuais** da playlist
 
 **Requisito:** tkinter instalado (verificado automaticamente)
 
@@ -151,10 +151,10 @@ A interface gráfica oferece a melhor experiência visual:
 
 Interface rápida e eficiente via terminal:
 
-- ⚡ **Rápida e leve**
-- 💻 **Funciona em qualquer terminal**
-- 🔧 **Ideal para servidores sem GUI**
-- ⌨️ **Navegação por teclado**
+- **Rápida e leve**
+- **Funciona em qualquer terminal**
+- **Ideal para servidores sem GUI**
+- **Navegação por teclado**
 
 **Requisito:** Apenas Python (sempre disponível)
 
@@ -168,9 +168,9 @@ Encerra o programa de forma segura.
 
 ---
 
-## 📱 Funcionalidades Detalhadas
+## Funcionalidades Detalhadas
 
-### 1️⃣ Adicionar Música
+### Adicionar Música
 
 #### Modo Manual:
 1. Digite o título da música
@@ -182,10 +182,10 @@ Encerra o programa de forma segura.
 2. Digite o nome do artista
 3. Clique em "🔍 Buscar Informações Automáticas"
 4. O sistema busca automaticamente:
-   - 📀 Nome do álbum
-   - 🎸 Gênero musical
-   - 📅 Ano de lançamento
-   - 🖼️ Capa do álbum (600x600px)
+   - Nome do álbum
+   - Gênero musical
+   - Ano de lançamento
+   - Capa do álbum (600x600px)
 
 **Exemplo:**
 ```
@@ -200,7 +200,7 @@ Resultado:
 ✅ Capa: Baixada
 ```
 
-### 2️⃣ Listar Músicas
+### Listar Músicas
 
 **Na GUI:**
 - Visualização em cards com capas
@@ -215,7 +215,7 @@ Resultado:
 2. Título: Imagine | Artista: John Lennon | Álbum: Imagine | Gênero: Rock | Ano: 1971
 ```
 
-### 3️⃣ Buscar Música
+### Buscar Música
 
 **Busca Inteligente:**
 - ✅ Busca em **todos os campos** (título, artista, álbum, gênero)
@@ -230,7 +230,7 @@ Resultado:
 - "198" → Encontra todas as músicas dos anos 1980-1989
 - "love" → Encontra títulos como "Love Me Do", "Lovely Day", etc.
 
-### 4️⃣ Editar Música
+### Editar Música
 
 1. Selecione a música a editar
 2. Modifique os campos desejados
@@ -243,7 +243,7 @@ Resultado:
 - Gênero
 - Ano
 
-### 5️⃣ Remover Música
+### Remover Música
 
 1. Selecione a música a remover
 2. Confirme a remoção
@@ -251,7 +251,7 @@ Resultado:
 
 **Aviso:** Esta ação não pode ser desfeita!
 
-### 6️⃣ Gerar Relatório
+### Gerar Relatório
 
 Crie relatórios personalizados filtrando por:
 
@@ -278,46 +278,6 @@ Total: 5 música(s)
    Gênero: Pop
 ```
 
-### 7️⃣ Estatísticas
-
-Visualize estatísticas da sua playlist:
-
-- 🎵 Total de músicas
-- 👤 Artistas únicos
-- 🎸 Gêneros únicos
-- 💿 Álbuns únicos
-- 🏆 Gênero mais comum
-- 🖼️ Capas baixadas
-
----
-
-## 🎨 Interface Gráfica (GUI)
-
-### Tela Principal
-
-```
-╔════════════════════════════════════════════════════════════╗
-║            🎵 GERENCIADOR DE PLAYLIST                      ║
-╠════════════════════════════════════════════════════════════╣
-║  [🔍 Buscar: ____________________]                         ║
-║                                                            ║
-║  ┌──────────────────────────────────┐  ┌───────────────┐  ║
-║  │ 🖼️  Thriller                     │  │ ➕ Adicionar  │  ║
-║  │     Michael Jackson              │  │ 📊 Relatório  │  ║
-║  │     Thriller • 1982              │  │ 💾 Salvar     │  ║
-║  │     Pop                          │  │ 🔄 Recarregar │  ║
-║  │     [✏️Editar] [🗑️Remover] [🖼️Img]│  └───────────────┘  ║
-║  └──────────────────────────────────┘                     ║
-║                                                            ║
-║  ┌──────────────────────────────────┐  📈 ESTATÍSTICAS   ║
-║  │ 🖼️  Imagine                      │  Total: 5          ║
-║  │     John Lennon                  │  Artistas: 4       ║
-║  │     Imagine • 1971               │  Gêneros: 3        ║
-║  │     Rock                         │                    ║
-║  └──────────────────────────────────┘                     ║
-╚════════════════════════════════════════════════════════════╝
-```
-
 ### Recursos da GUI:
 
 #### Barra de Busca
@@ -331,15 +291,15 @@ Visualize estatísticas da sua playlist:
 - Artista, álbum e ano
 - Gênero
 - Botões de ação:
-  - ✏️ Editar
-  - 🗑️ Remover
-  - 🖼️ Trocar Imagem
+  -  Editar
+  -  Remover
+  -  Trocar Imagem
 
 #### Painel de Ações
-- ➕ Adicionar Música
-- 📊 Gerar Relatório
-- 💾 Salvar Playlist
-- 🔄 Recarregar Dados
+- Adicionar Música
+- Gerar Relatório
+- Salvar Playlist
+- Recarregar Dados
 
 #### Painel de Estatísticas
 - Total de músicas
@@ -435,31 +395,6 @@ O sistema utiliza a **iTunes Search API** para buscar informações:
 4. Baixa a capa automaticamente
 5. Salva em `data/album_covers/`
 
-### Vantagens:
-
-✅ **100% Gratuita** - Sem custo ou limites  
-✅ **Sem cadastro** - Não precisa de API key  
-✅ **Dados oficiais** - Informações da Apple Music  
-✅ **Capas em alta qualidade** - 600x600 pixels  
-✅ **Cache local** - Capas são reutilizadas  
-
-### Limitações:
-
-❌ **Requer internet** - Apenas para a busca  
-❌ **Músicas muito obscuras** - Podem não ser encontradas  
-❌ **Nome preciso** - Use o nome oficial para melhores resultados  
-
-### Dicas para Melhor Resultado:
-
-✅ Use o nome **oficial** da música  
-✅ Use o nome **completo** do artista  
-✅ Evite abreviações  
-✅ Não use feat., ft., etc.  
-
-**Exemplo:**
-- ✅ Bom: "Bohemian Rhapsody" + "Queen"
-- ❌ Ruim: "Bohemian" + "Q"
-
 ---
 
 ## 🛠️ Solução de Problemas
@@ -554,7 +489,7 @@ ls -la data/album_covers/
 chmod 755 data/album_covers/
 
 # Tente baixar novamente
-# Opção: Clique em "🖼️ Imagem" no card da música
+# Opção: Clique em "Imagem" no card da música
 ```
 
 ### Problema: Playlist não salva
@@ -574,7 +509,7 @@ chmod 755 data/
 
 ---
 
-## ❓ Perguntas Frequentes
+## Perguntas Frequentes
 
 ### 1. Preciso estar online para usar?
 
@@ -639,44 +574,6 @@ Baixe a versão mais recente e substitua os arquivos, mantendo a pasta `data/` p
 
 ---
 
-## 📊 Estrutura de Arquivos
-
-```
-PythonProject/
-│
-├── playlist.py                      # Programa principal
-├── executar_windows.bat             # Launcher Windows
-├── executar_macos_linux.sh          # Launcher macOS/Linux
-├── README.md                        # Documentação resumida
-│
-├── src/                             # Código-fonte
-│   ├── main.py                      # Interface CLI
-│   ├── main_gui.py                  # Interface GUI
-│   └── api_music.py                 # Integração com iTunes API
-│
-├── data/                            # Dados da aplicação
-│   ├── playlist.txt                 # Suas músicas (NÃO deletar!)
-│   └── album_covers/                # Capas baixadas
-│       ├── thriller.png
-│       ├── imagine.png
-│       └── ...
-│
-└── docs/                            # Documentação
-    └── README.md                    # Este arquivo
-```
-
----
-
-## 🎓 Créditos e Tecnologias
-
-### Tecnologias Utilizadas:
-
-- **Python 3.8+** - Linguagem de programação
-- **Tkinter** - Interface gráfica
-- **Pillow (PIL)** - Processamento de imagens
-- **requests** - Requisições HTTP
-- **iTunes Search API** - Busca de informações musicais
-
 ### API Utilizada:
 
 **iTunes Search API**
@@ -686,24 +583,5 @@ PythonProject/
 
 ---
 
-## 📞 Suporte
-
-### Precisa de ajuda?
-
-1. **Leia este guia** - A maioria das dúvidas está respondida aqui
-2. **Verifique a seção** [Solução de Problemas](#solução-de-problemas)
-3. **Consulte as** [Perguntas Frequentes](#perguntas-frequentes)
-4. **Execute os launchers** - Eles verificam e corrigem automaticamente a maioria dos problemas
-
----
-
-## 🎉 Aproveite!
-
-Agora você está pronto para gerenciar suas músicas favoritas de forma profissional!
-
-**Boa diversão! 🎵🎶**
-
----
-
-*Última atualização: Outubro 2025*
+*Última atualização: Novembro 2025*
 
